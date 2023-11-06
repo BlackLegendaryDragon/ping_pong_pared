@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a9082f1c-a0e7-4c3c-be09-d5caabdf8a20}</ProjectGuid>
-    <RootNamespace>pingpongpared</RootNamespace>
+    <ProjectGuid>{140a8f29-c59f-4acb-882b-0a2d0f184e54}</ProjectGuid>
+    <RootNamespace>Project1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

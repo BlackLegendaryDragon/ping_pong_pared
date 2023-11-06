@@ -1,4 +1,4 @@
-#include <stdio.h>
+ï»¿#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <windows.h>
@@ -12,17 +12,18 @@ char top[16] = { "vidas y puntos" };
 char bottom[16] = { "vidas" };
 
 //letras
-int w = 0;
+//int w = 0;
 int a = 0;
-int s = 0;
+//int s = 0;
 int d = 0;
 char key_code;
 
-int velX = 0;
-int velY = 0;
-int speed = 1;
-int posPX = 10;
-int posPY = 10;
+//jugador
+int velJugadorX = 0, velJugadorY = 0, speedJugador = 1, posJugadorX = 10, posJugadorY = 21;
+
+//pelota
+int velPelotaX = 1, velPelotaY = 1, speedPelota = 1, posPelotaX = 10, posPelotaY = 10;
+
 CHAR_INFO buffer[largoX * largoY];
 
 void matrix_fill(char color) {
@@ -35,19 +36,19 @@ void matrix_fill(char color) {
 	}
 }
 
-void matrix_draw_rect(int posX, int posY, int ancho, int alto, char color) {
+void matrix_draw_rect(int posX,int posY,int ancho,int alto,char color) {
 	for (int y = 0; y <= alto; y++)
 	{
 		for (int x = 0; x <= ancho; x++)
 		{
-			pantalla[x + posX][y + posY] = color;
+			pantalla[x+posX][y+posY] = color;
 		}
 	}
 }
 
 void matrix_show() {
-	int largo = (largoX * largoY);
-	char screen[(largoX * largoY)];
+	int largo = (largoX*largoY);
+	char screen[(largoX*largoY)];
 	int numX = 0;
 	int numY = 0;
 	for (int i = 0; i < largo; i++)
@@ -82,64 +83,64 @@ void forever() {
 			key_code = _getch();
 		}
 
-		if (key_code == 'a') {
-			velX = -(speed);
-		}
-		else if (key_code == 'd') {
-			velX = (speed);
-		}
-		else if (key_code == 'w') {
-			velY = -(speed);
-		}
-		else if (key_code == 's') {
-			velY = (speed);
-		}
-		else {
-			velX = 0;
-			velY = 0;
+		if (key_code=='a' && posJugadorX > 0) {
+			posJugadorX += -(speedJugador);
+			key_code = ' ';
+		}else if (key_code == 'd' && posJugadorX < largoX-5) {
+			posJugadorX += (speedJugador);
+			key_code = ' ';
+		}else {
+			velJugadorX = 0;
+			velJugadorY = 0;
 		}
 		//key_code = ' ';
-		if (posPX >= largoX) {
-			velX = -(speed);
+		if (posPelotaX >= largoX) {
+			velPelotaX = -(speedPelota);
 		}
-		if (posPX <= 0) {
-			velX = (speed);
+		if (posPelotaX <= 0) {
+			velPelotaX = (speedPelota);
 		}
-		if (posPY >= largoY) {
-			velY = -(speed);
+		if (posPelotaY >= largoY) {
+			velPelotaY = -(speedPelota);
 		}
-		if (posPY <= 0) {
-			velY = (speed);
+		if (posPelotaY <= 0) {
+			velPelotaY = (speedPelota);
 		}
 
 		//tracers
-		if (velX > 0 && velY > 0) {
-			buffer[matrix_to_array(posPX, posPY)].Char.UnicodeChar = '\\';
+		if (velPelotaX > 0 && velPelotaY > 0) {
+			buffer[matrix_to_array(posPelotaX, posPelotaY)].Char.UnicodeChar = '\\';
 		}
-		if (velX < 0 && velY < 0) {
-			buffer[matrix_to_array(posPX, posPY)].Char.UnicodeChar = '\\';
+		if (velPelotaX < 0 && velPelotaY < 0) {
+			buffer[matrix_to_array(posPelotaX, posPelotaY)].Char.UnicodeChar = '\\';
 		}
-		if (velX > 0 && velY < 0) {
-			buffer[matrix_to_array(posPX, posPY)].Char.UnicodeChar = '/';
+		if (velPelotaX > 0 && velPelotaY < 0) {
+			buffer[matrix_to_array(posPelotaX, posPelotaY)].Char.UnicodeChar = '/';
 		}
-		if (velX < 0 && velY > 0) {
-			buffer[matrix_to_array(posPX, posPY)].Char.UnicodeChar = '/';
+		if (velPelotaX < 0 && velPelotaY > 0) {
+			buffer[matrix_to_array(posPelotaX, posPelotaY)].Char.UnicodeChar = '/';
 		}
-		if (velX != 0 && velY == 0) {
-			buffer[matrix_to_array(posPX, posPY)].Char.UnicodeChar = '-';
+		if (velPelotaX != 0 && velPelotaY == 0) {
+			buffer[matrix_to_array(posPelotaX, posPelotaY)].Char.UnicodeChar = '-';
 		}
-		if (velY != 0 && velX == 0) {
-			buffer[matrix_to_array(posPX, posPY)].Char.UnicodeChar = '|';
+		if (velPelotaY != 0 && velPelotaX == 0) {
+			buffer[matrix_to_array(posPelotaX, posPelotaY)].Char.UnicodeChar = '|';
 		}
 
-		posPX += velX;
-		posPY += velY;
+		posPelotaX += velPelotaX;
+		posPelotaY += velPelotaY;
 		tracer++;
 
 		//pantalla[posPX][posPY] = 'o';
 		//system("cls");
 		//matrix_show();
-		buffer[matrix_to_array(posPX, posPY)].Char.UnicodeChar = 'o';
+		for (size_t i = 0; i < 5; i++)
+		{
+		buffer[matrix_to_array(posJugadorX+i, posJugadorY)].Char.UnicodeChar = '=';
+		}
+
+		buffer[matrix_to_array(posPelotaX, posPelotaY)].Char.UnicodeChar = 'o';
+
 		delay(tiempo);
 		//pantalla[posPX][posPY] = ' ';
 		matrix_show_buffer();
@@ -176,10 +177,17 @@ int matrix_to_array(int posX, int posY) {
 	return (largoX * posY) + posX;
 }
 
+int array_to_matrix(int arreglo) {
+	int largo = arreglo;
+	if (arreglo % largoX == 0) {
+		largo = largo / 2;
+	}
+}
+
 int matrix_rect_buffer(int posX, int posY, int fiX, int fiY, char car) {
 	for (int y = 1; y <= fiY; y++) {
 		for (int x = 1; x <= fiX; x++) {
-			buffer[matrix_to_array(x + posX, y + posY)].Char.UnicodeChar = car;
+			buffer[matrix_to_array(x+posX, y+posY)].Char.UnicodeChar = car;
 		}
 	}
 }
@@ -189,10 +197,10 @@ int matrix_show_buffer() {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	// Crear un conjunto de caracteres y colores
-	//CHAR_INFO buffer[largoX * largoY];  // 80 caracteres de ancho y 25 líneas de alto
-	COORD bufferSize = { largoX, largoY }; // Tamaño del buffer
+	//CHAR_INFO buffer[largoX * largoY];  // 80 caracteres de ancho y 25 lÃ­neas de alto
+	COORD bufferSize = { largoX, largoY }; // TamaÃ±o del buffer
 	COORD bufferCoord = { 0, 0 };  // Coordenadas de inicio en el buffer
-	SMALL_RECT writeRegion = { 0, 0, largoX, largoY }; // Región de la pantalla donde escribir
+	SMALL_RECT writeRegion = { 0, 0, largoX, largoY }; // RegiÃ³n de la pantalla donde escribir
 
 	// Llenar el buffer con caracteres y colores (en este caso, solo texto)
 	for (int i = 0; i < (largoX * largoY); ++i) {
@@ -226,7 +234,7 @@ int main() {
 	forever();
 	//matrix_show();
 	matrix_show_buffer();
-
+	
 
 
 	return 0;
